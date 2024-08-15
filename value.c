@@ -1,8 +1,11 @@
 #include <stdio.h>
+#include <string.h>
 
+#include "object.h"
 #include "memory.h"
 #include "value.h"
 
+// ----------------------------------------------------------------------------
 void initValueArray( ValueArray* array )
 {
     array->values   = NULL;
@@ -10,6 +13,7 @@ void initValueArray( ValueArray* array )
     array->count    = 0;
 }
 
+// ----------------------------------------------------------------------------
 void writeValueArray( ValueArray* array, Value value )
 {
     if ( array->capacity < array->count + 1 )
@@ -24,12 +28,14 @@ void writeValueArray( ValueArray* array, Value value )
     array->count++;
 }
 
+// ----------------------------------------------------------------------------
 void freeValueArray( ValueArray* array )
 {
     FREE_ARRAY( Value, array->values, array->capacity );
     initValueArray( array );
 }
 
+// ----------------------------------------------------------------------------
 void printValue( Value value )
 {
     switch ( value.type )
@@ -43,9 +49,13 @@ void printValue( Value value )
     case VAL_NUMBER:
         printf( "%g", AS_NUMBER( value ) );
         break;
+    case VAL_OBJ:
+        printObject( value );
+        break;
     }
 }
 
+// ----------------------------------------------------------------------------
 bool valuesEqual( Value a, Value b )
 {
     if ( a.type != b.type )
@@ -58,6 +68,13 @@ bool valuesEqual( Value a, Value b )
         return true;
     case VAL_NUMBER:
         return AS_NUMBER( a ) == AS_NUMBER( b );
+    case VAL_OBJ:
+    {
+        ObjString* aString = AS_STRING( a );
+        ObjString* bString = AS_STRING( b );
+        return aString->length == bString->length &&
+               memcmp( aString->chars, bString->chars, aString->length ) == 0;
+    }
     default:
         return false;   // Unreachable.
     }

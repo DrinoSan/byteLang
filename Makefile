@@ -3,7 +3,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -g
 
 # List of source files
-SRCS = chunk.c debug.c main.c memory.c value.c vm.c compiler.c scanner.c
+SRCS = chunk.c debug.c main.c memory.c value.c vm.c compiler.c scanner.c object.c
 
 # List of object files (by replacing .c with .o)
 OBJS = $(SRCS:.c=.o)

@@ -24,6 +24,8 @@ void freeChunk( Chunk* chunk )
 }
 
 // ----------------------------------------------------------------------------
+// Because of uint8_t we can only safe up to 256 
+// chunk->code ist ein int8_t
 void writeChunk( Chunk* chunk, uint8_t byte, int line )
 {
     if ( chunk->capacity < chunk->count + 1 )
@@ -32,6 +34,7 @@ void writeChunk( Chunk* chunk, uint8_t byte, int line )
         chunk->capacity = GROW_CAPACITY( oldCapacity );
         chunk->code =
             GROW_ARRAY( uint8_t, chunk->code, oldCapacity, chunk->capacity );
+
         chunk->lines =
             GROW_ARRAY( int, chunk->lines, oldCapacity, chunk->capacity );
     }

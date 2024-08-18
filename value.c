@@ -60,6 +60,7 @@ bool valuesEqual( Value a, Value b )
 {
     if ( a.type != b.type )
         return false;
+
     switch ( a.type )
     {
     case VAL_BOOL:

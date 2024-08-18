@@ -173,6 +173,18 @@ static void emitBytes( uint8_t byte1, uint8_t byte2 )
 }
 
 // ----------------------------------------------------------------------------
+static int emitJump( uint8_t instruction )
+{
+    emitByte( instruction );
+    emitByte( 0xff );
+    emitByte( 0xff );
+
+    // emitByte increases count by one therefore we need to -2 to get to the
+    // first 0xff
+    return currentChunk()->count - 2;
+}
+
+// ----------------------------------------------------------------------------
 static void emitReturn()
 {
     emitByte( OP_RETURN );
@@ -195,6 +207,24 @@ static uint8_t makeConstant( Value value )
 static void emitConstant( Value value )
 {
     emitBytes( OP_CONSTANT, makeConstant( value ) );
+}
+
+// ----------------------------------------------------------------------------
+static void patchJump( int offset )
+{
+    // -2 to adjust for the bytecode for the jump offset itself.
+    // Exmaple: OP_JUMP_IF_FALSE has additional two opcodes for the index where
+    // to jump. The offset is the index of OP_JUMP_IF_FALSE itself we need to
+    // substract the 2 to get the correct jump point
+    int jump = currentChunk()->count - offset - 2;
+
+    if ( jump > UINT16_MAX )
+    {
+        error( "Too much code to jump over." );
+    }
+
+    currentChunk()->code[ offset ]     = ( jump >> 8 ) & 0xff;
+    currentChunk()->code[ offset + 1 ] = jump & 0xff;
 }
 
 // ----------------------------------------------------------------------------
@@ -621,10 +651,24 @@ static void ifStatement()
     expression();
     consume( TOKEN_RIGHT_PAREN, "Expect ')' after condition." );
 
-    /*int thenJump = emitJump( OP_JUMP_IF_FALSE );*/
-    /*statement();*/
-    /**/
-    /*patchJump( thenJump );*/
+    int thenJump = emitJump( OP_JUMP_IF_FALSE );
+
+    emitByte( OP_POP );
+
+    // Then statement
+    statement();
+
+    int elseJump = emitJump( OP_JUMP );
+
+    patchJump( thenJump );
+
+    emitByte( OP_POP );
+
+    // Else statement
+    if ( match( TOKEN_ELSE ) )
+        statement();
+
+    patchJump( elseJump );
 }
 
 // ----------------------------------------------------------------------------

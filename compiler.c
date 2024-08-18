@@ -215,7 +215,7 @@ static void patchJump( int offset )
     // -2 to adjust for the bytecode for the jump offset itself.
     // Exmaple: OP_JUMP_IF_FALSE has additional two opcodes for the index where
     // to jump. The offset is the index of OP_JUMP_IF_FALSE itself we need to
-    // substract the 2 to get the correct jump point
+    // substract the 2 to get the correct jump point ---> this happens in vm.c we start from OP_JUMP_IF_FALSE and therefore we have also the -2
     int jump = currentChunk()->count - offset - 2;
 
     if ( jump > UINT16_MAX )
@@ -651,6 +651,7 @@ static void ifStatement()
     expression();
     consume( TOKEN_RIGHT_PAREN, "Expect ')' after condition." );
 
+    // For skippng the then part
     int thenJump = emitJump( OP_JUMP_IF_FALSE );
 
     emitByte( OP_POP );
@@ -658,6 +659,7 @@ static void ifStatement()
     // Then statement
     statement();
 
+    // For skipping the else part
     int elseJump = emitJump( OP_JUMP );
 
     patchJump( thenJump );

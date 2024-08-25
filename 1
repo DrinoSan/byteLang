@@ -168,6 +168,7 @@ static InterpretResult run()
         {
             ObjString* name = READ_STRING();
             tableSet( &vm.globals, name, peek( 0 ) );
+                    printf("CURRENT VAR WE GOT FROM STACK %d\n", peek());
             pop();
             break;
         }
@@ -254,12 +255,6 @@ static InterpretResult run()
             uint16_t offset = READ_SHORT();
             if ( isFalsey( peek( 0 ) ) )
                 vm.ip += offset;
-            break;
-        }
-        case OP_LOOP:
-        {
-            uint16_t offset = READ_SHORT();
-            vm.ip -= offset;
             break;
         }
         case OP_RETURN:

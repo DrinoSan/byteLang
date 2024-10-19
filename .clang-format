@@ -1,6 +1,6 @@
 # options: https://clang.llvm.org/docs/ClangFormatStyleOptions.html
 BasedOnStyle: LLVM
-IndentWidth: 4
+IndentWidth: 3
 # Must be 80 characters or less!
 ColumnLimit: 80
 # does (int) x instead of (int)x
@@ -9,7 +9,7 @@ SpaceAfterCStyleCast: true
 UseTab: Never
 # if (x) doStuff()  is not allowed, bad style
 AllowShortIfStatementsOnASingleLine: false
-# 
+#
 AlignTrailingComments: true
 SpacesBeforeTrailingComments: 3
 # change the next line to All for Alistair's textbook style

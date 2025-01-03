@@ -3,7 +3,9 @@
 
 #include "common.h"
 
+// Base Class
 typedef struct Obj       Obj;
+
 typedef struct ObjString ObjString;
 
 typedef enum

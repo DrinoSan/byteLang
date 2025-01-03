@@ -42,6 +42,7 @@ typedef struct
 // ----------------------------------------------------------------------------
 typedef Value ( *NativeFn )( int argCount, Value* args );
 
+// ----------------------------------------------------------------------------
 typedef struct
 {
    Obj      obj;
@@ -49,6 +50,7 @@ typedef struct
 } ObjNative;
 
 // ----------------------------------------------------------------------------
+// Child class of Obj
 struct ObjString
 {
     Obj      obj;

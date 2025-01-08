@@ -747,6 +747,7 @@ static void function( FunctionType type )
    consume( TOKEN_LEFT_BRACE, "Expect '{' before function body." );
    block();
 
+   // endScope() not provided beause we call anyway endCompiler...
    ObjFunction* function = endCompiler();
    emitBytes( OP_CONSTANT, makeConstant( OBJ_VAL( function ) ) );
 }

@@ -60,7 +60,6 @@ struct ObjString
 };
 
 // OBJ FUNCTION stuff
-
 // ----------------------------------------------------------------------------
 ObjFunction* newFunction();
 

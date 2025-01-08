@@ -167,6 +167,7 @@ static InterpretResult run()
    CallFrame* frame = &vm.frames[ vm.frameCount - 1 ];
 #define READ_BYTE() ( *frame->ip++ )
 
+// Hier lesen wir vom contants array, READ_BYTE gibt uns nur den index zurueck
 #define READ_CONSTANT()                                                        \
    ( frame->function->chunk.constants.values[ READ_BYTE() ] )
 
@@ -233,6 +234,7 @@ static InterpretResult run()
             uint8_t slot =
                 READ_BYTE();   // We get the index of the local variable name in
                                // the compiler locals array
+
             push( frame->slots[ slot ] );
             break;
         }

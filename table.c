@@ -98,7 +98,7 @@ static void adjustCapacity( Table* table, int capacity )
         Entry* dest = findEntry( entries, capacity, entry->key );
         dest->key   = entry->key;
         dest->value = entry->value;
-        table->count++;   // Count is changes only for non tombstones
+        table->count++;   // Count is changes only for non tombstones, also tombstones are not copied over
     }
 
     FREE_ARRAY( Entry, table->entries, table->capacity );
@@ -120,7 +120,9 @@ bool tableSet( Table* table, ObjString* key, Value value )
     bool   isNewKey = entry->key == NULL;
 
     if ( isNewKey && IS_NIL( entry->value ) )
+    {
         table->count++;
+    }
 
     entry->key   = key;
     entry->value = value;

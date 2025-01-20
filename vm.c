@@ -213,8 +213,6 @@ static InterpretResult run()
         {
             Value constant = READ_CONSTANT();
             push( constant );
-            //printValue( constant );
-            //printf( "upsi\n" );
             break;
         }
         case OP_NIL:
@@ -357,6 +355,7 @@ static InterpretResult run()
         case OP_CALL:
         {
            int argCount = READ_BYTE();
+           // OP_CALL, PARAM1, PARAM2, BODY    peek(argCount) springt direkt zum body...
            if ( !callValue( peek( argCount ), argCount ) )
            {
               return INTERPRET_RUNTIME_ERROR;
